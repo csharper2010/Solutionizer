@@ -33,5 +33,20 @@ namespace Solutionizer.Update.Tests {
             var result = updateManager.GetUpdateInfosSinceCurrentVersion().Result;
             CollectionAssert.IsEmpty(result);
         }
+
+        [Test]
+        public void CanDownloadUpdate() {
+            var uri = new Uri(Path.GetDirectoryName(GetType().Assembly.CodeBase) + "/fixtures/v1.2.3.4.zip");
+            var targetPath = Path.GetTempFileName();
+
+            var updateManager = new UpdateManager();
+            try {
+                updateManager.DownloadUpdate(new UpdateInfo { DownloadUri = uri }, targetPath).Wait();
+
+                Assert.IsTrue(File.Exists(targetPath));
+            } finally {
+                File.Delete(targetPath);
+            }
+        }
     }
 }
