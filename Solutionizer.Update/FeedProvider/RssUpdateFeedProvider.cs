@@ -9,26 +9,12 @@ using System.Xml.Linq;
 
 namespace Solutionizer.Update.FeedProvider {
     public class RssUpdateFeedProvider : IUpdateFeedProvider {
-        public IWebProxy Proxy { get; set; }
         public Uri Uri { get; set; }
 
         public Task<List<UpdateInfo>> GetUpdateInfos() {
-            var tcs = new TaskCompletionSource<List<UpdateInfo>>();
-
-            var wc = new WebClient { Proxy = Proxy };
-            wc.DownloadStringCompleted += (sender, args) => {
-                if (args.Error != null) {
-                    tcs.SetException(args.Error);
-                } else if (args.Cancelled) {
-                    tcs.SetCanceled();
-                } else {
-                    tcs.SetResult(ParseFeed(args.Result));
-                }
-            };
-
-            wc.DownloadStringAsync(Uri);
-
-            return tcs.Task;
+            return WebClientHelper
+                .DownloadString(Uri)
+                .ContinueWith(t => ParseFeed(t.Result));
         }
 
         private List<UpdateInfo> ParseFeed(string content) {
