@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Solutionizer.Update.FeedProvider;
@@ -9,6 +10,10 @@ namespace Solutionizer.Update {
         public SemanticVersion CurrentVersion { get; set; }
 
         public Task<List<UpdateInfo>> GetUpdateInfosSinceCurrentVersion() {
+            if (CurrentVersion == null) {
+                throw new InvalidOperationException("CurrentVersion is not set");
+            }
+
             return UpdateFeedProvider
                 .GetUpdateInfos()
                 .ContinueWith(t => t.Result.Where(updateInfo => updateInfo.Version > CurrentVersion).ToList());

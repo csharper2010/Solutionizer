@@ -13,6 +13,13 @@ namespace Solutionizer.Update {
         }
 
         public static Task Download(Uri sourceUri, string targetPath) {
+            if (sourceUri == null) {
+                throw new ArgumentNullException("sourceUri", "sourceUri must not be null.");
+            }
+            if (String.IsNullOrWhiteSpace(targetPath)) {
+                throw new ArgumentNullException("targetPath", "targetPath must not be null or empty.");
+            }
+
             var tcs = new TaskCompletionSource<string>();
 
             var wc = CreateWebClient();
@@ -32,6 +39,10 @@ namespace Solutionizer.Update {
 
         
         public static Task<string> DownloadString(Uri sourceUri) {
+            if (sourceUri == null) {
+                throw new ArgumentNullException("sourceUri", "sourceUri must not be null.");
+            }
+
             var tcs = new TaskCompletionSource<string>();
 
             var wc = new WebClient { Proxy = Proxy };
