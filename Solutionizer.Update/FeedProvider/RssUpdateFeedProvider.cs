@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -40,10 +41,14 @@ namespace Solutionizer.Update.FeedProvider {
         }
 
         private UpdateInfo GetUpdateInfoFromXElement(XElement itemElement) {
-            SemanticVersion version;
             var element = itemElement.Element("title");
-            if (element == null || String.IsNullOrWhiteSpace(element.Value) || !SemanticVersion.TryParse(element.Value, out version)) {
+            if (element == null || String.IsNullOrWhiteSpace(element.Value)) {
                 // invalid version
+                return null;
+            }
+            SemanticVersion version;
+            var match = Regex.Match(element.Value, @"\d+(\s*\.\s*\d+){0,3}(-[a-z][0-9a-z-]*)?");
+            if (!match.Success || !SemanticVersion.TryParse(match.Value, out version)) {
                 return null;
             }
 

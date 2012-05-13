@@ -2,7 +2,7 @@
 <rss version="2.0">
   <channel>
     <item>
-      <title>1.2.3.4</title>
+      <title>Version 1.2.3.4 released</title>
       <description>This is Version 1.2.3.4</description>
       <pubDate>Sun, 13 May 2012 08:56:02 GMT</pubDate>
       <enclosure url="v1.2.3.4.zip" length="1024" type="application/zip" />
