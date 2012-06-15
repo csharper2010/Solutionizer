@@ -54,7 +54,7 @@ Task Clean {
     Exec { msbuild $solution_file /t:Clean /p:Configuration=Release /v:minimal } 
 }
 
-Task Package -depends CreateAssemblyInfo {
+Task Package -depends CreateAssemblyInfo, Compile {
 	Remove-Item $nupack_dir -Force -Recurse -ErrorAction SilentlyContinue
 	New-Item $nupack_dir -Type directory | Out-Null
 
