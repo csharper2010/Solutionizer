@@ -100,4 +100,8 @@ Task Package -depends CreateAssemblyInfo {
 	$nuspec_path = (Join-Path $nupack_dir "solutionizer.nuspec")
 	$xml.Save($nuspec_path) | Out-Null
 	& "$build_dir\.nuget\nuget.exe" pack $nuspec_path -OutputDirectory $nupack_dir -NoPackageAnalysis
+    $package_path = Join-Path $nupack_dir "solutionizer.$version.nupkg"
+    if (!(Test-Path $package_path)) {
+        throw "The new package was not created with the expected name `"$package_path`""
+    }
 }
