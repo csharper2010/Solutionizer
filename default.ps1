@@ -104,4 +104,12 @@ Task Package -depends CreateAssemblyInfo {
     if (!(Test-Path $package_path)) {
         throw "The new package was not created with the expected name `"$package_path`""
     }
+    
+    # we need to load NSync manually until there's a better solution
+    [Reflection.Assembly]::LoadFile("$build_dir\tools\NSync\NSync.Core.dll") | Out-Null
+   
+    $releaseEntry = [NSync.Core.ReleaseEntry]::GenerateFromFile($package_path)
+    
+    # though we call Add-Content, the RELEASES file will contain only this release entry, because at the start of this task we delete the NuPack folder
+    Add-Content "$nupack_dir\RELEASES" -value "$($releaseEntry.EntryAsString)"
 }
