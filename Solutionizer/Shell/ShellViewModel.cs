@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Caliburn.Micro;
 using Ookii.Dialogs.Wpf;
+using Shimmer.Client;
 using Solutionizer.FileScanning;
 using Solutionizer.Infrastructure;
 using Solutionizer.ProjectRepository;
@@ -19,7 +20,7 @@ namespace Solutionizer.Shell {
         private SolutionViewModel _solution;
 
         [ImportingConstructor]
-        public ShellViewModel(Services.Settings settings, IDialogManager dialogManager) {
+        public ShellViewModel(Services.Settings settings, IDialogManager dialogManager, IUpdateManager updateManager) {
             _settings = settings;
             _projectRepository = new ProjectRepositoryViewModel(settings);
             _dialogManager = dialogManager;
