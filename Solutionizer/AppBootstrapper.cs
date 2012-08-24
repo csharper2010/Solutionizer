@@ -13,7 +13,6 @@ using NLog;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
-using Shimmer.Client;
 using Solutionizer.Services;
 using LogManager = NLog.LogManager;
 
@@ -46,7 +45,6 @@ namespace Solutionizer {
 
             batch.AddExportedValue<IWindowManager>(new WindowManager());
             batch.AddExportedValue<IEventAggregator>(new EventAggregator());
-            batch.AddExportedValue<IUpdateManager>(new UpdateManager("", "Solutionizer", FrameworkVersion.Net40));
             batch.AddExportedValue(_settingsProvider.Settings);
             batch.AddExportedValue(_container);
             batch.AddExportedValue(catalog);
