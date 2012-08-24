@@ -14,6 +14,7 @@ using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 using Solutionizer.Services;
+using Solutionizer.Update;
 using LogManager = NLog.LogManager;
 
 namespace Solutionizer {
@@ -48,6 +49,7 @@ namespace Solutionizer {
             batch.AddExportedValue(_settingsProvider.Settings);
             batch.AddExportedValue(_container);
             batch.AddExportedValue(catalog);
+            batch.AddExportedValue<IUpdateManager>(new UpdateManager());
 
             _container.Compose(batch);
         }

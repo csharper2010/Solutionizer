@@ -6,6 +6,7 @@ using Solutionizer.Infrastructure;
 using Solutionizer.ProjectRepository;
 using Solutionizer.Settings;
 using Solutionizer.Solution;
+using Solutionizer.Update;
 using Solutionizer.ViewModels;
 
 namespace Solutionizer.Shell {
@@ -15,14 +16,16 @@ namespace Solutionizer.Shell {
     public sealed class ShellViewModel : Screen, IShell {
         private readonly Services.Settings _settings;
         private readonly IDialogManager _dialogManager;
+        private readonly IUpdateManager _updateManager;
         private readonly ProjectRepositoryViewModel _projectRepository;
         private SolutionViewModel _solution;
 
         [ImportingConstructor]
-        public ShellViewModel(Services.Settings settings, IDialogManager dialogManager) {
+        public ShellViewModel(Services.Settings settings, IDialogManager dialogManager, IUpdateManager updateManager) {
             _settings = settings;
             _projectRepository = new ProjectRepositoryViewModel(settings);
             _dialogManager = dialogManager;
+            _updateManager = updateManager;
             DisplayName = "Solutionizer";
         }
 
@@ -46,6 +49,8 @@ namespace Solutionizer.Shell {
 
         protected override void OnViewLoaded(object view) {
             base.OnViewLoaded(view);
+
+            _updateManager.CheckForUpdate();
 
             if (_settings.ScanOnStartup) {
                 LoadProjects(_settings.RootPath);

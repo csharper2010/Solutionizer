@@ -113,7 +113,6 @@
     <Compile Include="Shell\DialogConductorViewModel.cs" />
     <Compile Include="Shell\ShellViewModel.cs" />
     <Compile Include="Solution\SolutionViewModel.cs" />
-    <Compile Include="Update\UpdateManager.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
@@ -191,6 +190,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\wait.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Solutionizer.Update\Solutionizer.Update.csproj">
+      <Project>{C6174B2F-ED96-4986-AC02-466B62C7FA1D}</Project>
+      <Name>Solutionizer.Update</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
