@@ -65,14 +65,15 @@ namespace Solutionizer {
 
             var config = new LoggingConfiguration();
             config.AddTarget("file", fileTarget);
-
-            var debuggerTarget = new DebuggerTarget();
-            config.AddTarget("debugger", debuggerTarget);
-
             var rule1 = new LoggingRule("*", LogLevel.Debug, fileTarget);
             config.LoggingRules.Add(rule1);
-            var rule2 = new LoggingRule("*", LogLevel.Debug, debuggerTarget);
-            config.LoggingRules.Add(rule2);
+
+            if (Debugger.IsAttached) {
+                var debuggerTarget = new DebuggerTarget();
+                config.AddTarget("debugger", debuggerTarget);
+                var rule2 = new LoggingRule("*", LogLevel.Debug, debuggerTarget);
+                config.LoggingRules.Add(rule2);
+            }
 
             LogManager.Configuration = config;
 
