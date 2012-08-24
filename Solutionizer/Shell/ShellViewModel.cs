@@ -50,7 +50,14 @@ namespace Solutionizer.Shell {
         protected override void OnViewLoaded(object view) {
             base.OnViewLoaded(view);
 
-            _updateManager.CheckForUpdate();
+            _updateManager.CheckForUpdate().ContinueWith(t => {
+                if (t.IsCompleted) {
+                    var updateInfo = t.Result;
+                    if (updateInfo != null) {
+                        _updateManager.DownloadPackage(updateInfo);
+                    }
+                }
+            });
 
             if (_settings.ScanOnStartup) {
                 LoadProjects(_settings.RootPath);

@@ -13,7 +13,7 @@ namespace Solutionizer.Update {
         private readonly static Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IPackageRepository _packageRepository;
 
-        private IPackage _latestPackage;
+        private UpdateInfo _latestPackage;
         private List<UpdateInfo> _availableUpdates = new List<UpdateInfo>();
 
         public UpdateManager(IPackageRepository packageRepository = null) {
@@ -30,17 +30,27 @@ namespace Solutionizer.Update {
             }
         }
 
-        public Task CheckForUpdate (Version currentVersion = null, bool includePrereleases = false) {
+        public Task<UpdateInfo> CheckForUpdate (Version currentVersion = null, bool includePrereleases = false) {
             return Task.Factory.StartNew(() => {
                 var versionSpec = currentVersion != null 
                     ? new VersionSpec { MinVersion = new SemanticVersion(currentVersion),  IsMinInclusive = false }
                     : null;
                 var packages = _packageRepository.FindPackages(PACKAGE_ID, versionSpec, includePrereleases, true).ToArray();
-                _latestPackage = packages.SingleOrDefault(p => includePrereleases ? p.IsAbsoluteLatestVersion : p.IsLatestVersion)
-                    ?? packages.OrderByDescending(p => p.Version).FirstOrDefault();
 
                 _availableUpdates = packages.Select(p => new UpdateInfo(p)).ToList();
                 RaiseAvailableUpdatesChanged();
+
+                _latestPackage = _availableUpdates.SingleOrDefault(p => includePrereleases ? p.Package.IsAbsoluteLatestVersion : p.Package.IsLatestVersion)
+                    ?? _availableUpdates.OrderByDescending(p => p.Version).FirstOrDefault();
+
+                return _latestPackage;
+            });
+        }
+
+        public Task DownloadPackage(UpdateInfo updateInfo) {
+            return Task.Factory.StartNew(() => {
+                // this line forces NuGet to download the package
+                updateInfo.Package.HasProjectContent();
             });
         }
 

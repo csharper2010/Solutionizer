@@ -9,6 +9,10 @@ namespace Solutionizer.Update {
             _package = package;
         }
 
+        internal IPackage Package {
+            get { return _package; }
+        }
+
         public SemanticVersion Version {
             get { return _package.Version; }
         }
